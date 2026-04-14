@@ -299,28 +299,28 @@ white-space: nowrap;
 /* ─── ENTRY ─── */
 .entry-sec {
 padding: 0 14px;
-/* Prevent any child overflowing the screen */
 overflow: hidden;
+/* Establish a block formatting context so children respect this width */
+display: block;
 }
 
 .entry-grid {
-display: flex;
+/* Use CSS Grid — columns are guaranteed equal and gap is internal */
+display: grid;
+grid-template-columns: 1fr 1fr;
 gap: 12px;
 margin-bottom: 12px;
-/* Must not exceed the padded container */
+/* 100% of the padded parent — no viewport bleed */
 width: 100%;
-/* Prevent any child from pushing outside */
-overflow: hidden;
+box-sizing: border-box;
 }
 .eg {
-/* Each column is exactly (100% - gap) / 2 — no overflow possible */
-flex: 0 0 calc(50% - 6px);
-width: calc(50% - 6px);
+/* Grid cell — no explicit width needed, grid handles it */
 min-width: 0;
-max-width: calc(50% - 6px);
 display: flex;
 flex-direction: column;
 gap: 6px;
+overflow: hidden;
 }
 .elbl {
 font-size: 10px;
@@ -340,12 +340,14 @@ font-family: ‘Cinzel’, serif;
 font-size: 34px;
 font-weight: 600;
 text-align: center;
-padding: 14px 4px;
+padding: 14px 0;
 outline: none;
-/* Explicit: fill column, never wider */
+/* Fill the grid cell exactly — box-sizing handles border */
 width: 100%;
+min-width: 0;
 max-width: 100%;
 display: block;
+box-sizing: border-box;
 -webkit-appearance: none;
 -moz-appearance: textfield;
 appearance: none;
@@ -411,15 +413,16 @@ display: block;
 
 /* TOGGLES */
 .toggles {
-display: flex;
+display: grid;
+grid-template-columns: 1fr 1fr 1fr;
 gap: 10px;
 margin-bottom: 12px;
 width: 100%;
+box-sizing: border-box;
 }
 .tog {
-flex: 1;
-width: 0;
 min-width: 0;
+overflow: hidden;
 background-color: #231E17;
 border: 2px solid #4A3E28;
 border-radius: 12px;
@@ -434,6 +437,8 @@ line-height: 1.5;
 -webkit-appearance: none;
 appearance: none;
 display: block;
+width: 100%;
+box-sizing: border-box;
 transition: background-color 0.18s, border-color 0.18s, color 0.18s;
 -webkit-transition: background-color 0.18s, border-color 0.18s, color 0.18s;
 }
