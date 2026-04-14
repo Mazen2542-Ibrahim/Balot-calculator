@@ -297,20 +297,27 @@ white-space: nowrap;
 }
 
 /* ─── ENTRY ─── */
-.entry-sec { padding: 0 14px; }
+.entry-sec {
+padding: 0 14px;
+/* Prevent any child overflowing the screen */
+overflow: hidden;
+}
 
 .entry-grid {
 display: flex;
 gap: 12px;
 margin-bottom: 12px;
-/* Prevent children from growing beyond container */
+/* Must not exceed the padded container */
 width: 100%;
+/* Prevent any child from pushing outside */
+overflow: hidden;
 }
 .eg {
-/* Exactly half the container */
-flex: 1;
-width: 0;
+/* Each column is exactly (100% - gap) / 2 — no overflow possible */
+flex: 0 0 calc(50% - 6px);
+width: calc(50% - 6px);
 min-width: 0;
+max-width: calc(50% - 6px);
 display: flex;
 flex-direction: column;
 gap: 6px;
@@ -333,10 +340,11 @@ font-family: ‘Cinzel’, serif;
 font-size: 34px;
 font-weight: 600;
 text-align: center;
-padding: 14px 8px;
+padding: 14px 4px;
 outline: none;
-/* width:100% of the flex child, not the page */
+/* Explicit: fill column, never wider */
 width: 100%;
+max-width: 100%;
 display: block;
 -webkit-appearance: none;
 -moz-appearance: textfield;
