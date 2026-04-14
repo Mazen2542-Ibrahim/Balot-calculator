@@ -3,1190 +3,637 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no">
-<title>بالوت | Balot Calculator</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no, viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Balot">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="theme-color" content="#0d0a07">
+<title>بالوت | Balot</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='22' fill='%230d0a07'/><text y='75' x='50' text-anchor='middle' font-size='64' fill='%23c9a84c'>♠</text></svg>">
 <link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Cinzel+Decorative:wght@700&family=Cinzel:wght@400;600&display=swap" rel="stylesheet">
 <style>
-  :root {
-    --bg: #0d0a07;
-    --felt: #0e2218;
-    --felt2: #112b1e;
-    --gold: #c9a84c;
-    --gold2: #e8c96a;
-    --red: #c0392b;
-    --red2: #e74c3c;
-    --cream: #f5ead5;
-    --card-bg: #fdf6e3;
-    --dark: #1a1209;
-    --accent: #8b1a1a;
-    --border: rgba(201,168,76,0.35);
-    --shadow: 0 8px 32px rgba(0,0,0,0.6);
-    --radius: 14px;
-  }
-
-- { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
-
-body {
-font-family: ‘Cinzel’, serif;
-background: var(–bg);
-min-height: 100vh;
-display: flex;
-justify-content: center;
-align-items: flex-start;
-background-image:
-radial-gradient(ellipse at 20% 20%, rgba(139,26,26,0.12) 0%, transparent 60%),
-radial-gradient(ellipse at 80% 80%, rgba(14,34,24,0.5) 0%, transparent 60%),
-repeating-linear-gradient(45deg, transparent, transparent 40px, rgba(201,168,76,0.015) 40px, rgba(201,168,76,0.015) 41px),
-repeating-linear-gradient(-45deg, transparent, transparent 40px, rgba(201,168,76,0.015) 40px, rgba(201,168,76,0.015) 41px);
-}
-
-.app {
-width: 100%;
-max-width: 430px;
-min-height: 100vh;
-background: linear-gradient(160deg, #111208 0%, #0d1a10 40%, #0a0e07 100%);
-position: relative;
-overflow: hidden;
-padding-bottom: 24px;
-}
-
-/* Felt texture overlay */
-.app::before {
-content: ‘’;
-position: fixed;
-inset: 0;
-max-width: 430px;
-background-image: url(“data:image/svg+xml,%3Csvg xmlns=‘http://www.w3.org/2000/svg’ width=‘4’ height=‘4’%3E%3Ccircle cx=‘1’ cy=‘1’ r=‘0.5’ fill=‘rgba(255,255,255,0.015)’/%3E%3Ccircle cx=‘3’ cy=‘3’ r=‘0.5’ fill=‘rgba(255,255,255,0.01)’/%3E%3C/svg%3E”);
-pointer-events: none;
-z-index: 0;
-}
-
-/* Header */
-.header {
-position: relative;
-z-index: 2;
-text-align: center;
-padding: 28px 20px 20px;
-border-bottom: 1px solid var(–border);
-background: linear-gradient(180deg, rgba(201,168,76,0.08) 0%, transparent 100%);
-}
-
-.header-suits {
-display: flex;
-justify-content: center;
-gap: 10px;
-margin-bottom: 8px;
-font-size: 18px;
-}
-
-.suit-♠ { color: #e8e8e8; }
-.suit-♥ { color: var(–red2); }
-.suit-♦ { color: var(–red2); }
-.suit-♣ { color: #e8e8e8; }
-
-.header h1 {
-font-family: ‘Cinzel Decorative’, serif;
-font-size: 26px;
-background: linear-gradient(135deg, var(–gold) 0%, var(–gold2) 50%, var(–gold) 100%);
--webkit-background-clip: text;
--webkit-text-fill-color: transparent;
-background-clip: text;
-letter-spacing: 3px;
-text-shadow: none;
-line-height: 1.2;
-}
-
-.header-sub {
-font-family: ‘Amiri’, serif;
-font-size: 13px;
-color: rgba(201,168,76,0.5);
-letter-spacing: 2px;
-margin-top: 4px;
-}
-
-/* Score Board */
-.scoreboard {
-position: relative;
-z-index: 2;
-display: grid;
-grid-template-columns: 1fr 1fr;
-gap: 12px;
-padding: 16px 16px 0;
-}
-
-.team-card {
-background: linear-gradient(145deg, rgba(255,255,255,0.04) 0%, rgba(255,255,255,0.01) 100%);
-border: 1px solid var(–border);
-border-radius: var(–radius);
-padding: 14px 12px;
-text-align: center;
-position: relative;
-overflow: hidden;
-transition: border-color 0.3s;
-}
-
-.team-card.winning {
-border-color: rgba(201,168,76,0.6);
-box-shadow: 0 0 20px rgba(201,168,76,0.12);
-}
-
-.team-card::before {
-content: ‘’;
-position: absolute;
-top: 0; left: 0; right: 0;
-height: 2px;
-background: linear-gradient(90deg, transparent, var(–gold), transparent);
-opacity: 0;
-transition: opacity 0.3s;
-}
-
-.team-card.winning::before { opacity: 1; }
-
-.team-name-row {
-display: flex;
-align-items: center;
-justify-content: center;
-gap: 6px;
-margin-bottom: 10px;
-}
-
-.team-name {
-font-family: ‘Amiri’, serif;
-font-size: 15px;
-color: var(–cream);
-font-weight: 700;
-letter-spacing: 1px;
-}
-
-.team-name-input {
-font-family: ‘Amiri’, serif;
-font-size: 16px;
-color: var(–cream);
-font-weight: 700;
-background: transparent;
-border: none;
-border-bottom: 1px solid rgba(201,168,76,0.3);
-text-align: center;
-width: 90px;
-outline: none;
-letter-spacing: 1px;
-padding: 2px 0;
-}
-
-.team-name-input::placeholder { color: rgba(201,168,76,0.3); }
-
-.total-score {
-font-family: ‘Cinzel Decorative’, serif;
-font-size: 40px;
-line-height: 1;
-color: var(–gold2);
-text-shadow: 0 0 30px rgba(201,168,76,0.3);
-margin: 4px 0;
-transition: all 0.3s;
-}
-
-.team-card.winning .total-score {
-color: #fff;
-text-shadow: 0 0 30px rgba(201,168,76,0.5);
-}
-
-.rounds-won {
-font-size: 10px;
-color: rgba(201,168,76,0.5);
-letter-spacing: 1px;
-text-transform: uppercase;
-margin-top: 4px;
-}
-
-.rounds-won span {
-color: var(–gold);
-font-weight: 600;
-}
-
-/* Target score bar */
-.target-bar {
-position: relative;
-z-index: 2;
-padding: 10px 16px 0;
-}
-
-.progress-wrap {
-background: rgba(255,255,255,0.04);
-border-radius: 4px;
-border: 1px solid var(–border);
-overflow: hidden;
-position: relative;
-height: 6px;
-}
-
-.progress-fill {
-height: 100%;
-background: linear-gradient(90deg, var(–gold), var(–gold2));
-border-radius: 4px;
-transition: width 0.5s ease;
-position: relative;
-}
-
-.progress-fill.team2 {
-background: linear-gradient(90deg, var(–red), var(–red2));
-margin-left: auto;
-}
-
-.progress-labels {
-display: flex;
-justify-content: space-between;
-margin-top: 4px;
-font-size: 9px;
-color: rgba(201,168,76,0.4);
-letter-spacing: 1px;
-}
-
-/* Divider */
-.divider {
-position: relative;
-z-index: 2;
-display: flex;
-align-items: center;
-gap: 8px;
-padding: 14px 16px 8px;
-}
-
-.divider-line {
-flex: 1;
-height: 1px;
-background: linear-gradient(90deg, transparent, var(–border), transparent);
-}
-
-.divider-text {
-font-size: 9px;
-color: rgba(201,168,76,0.4);
-letter-spacing: 2px;
-text-transform: uppercase;
-}
-
-/* Round Entry */
-.round-entry {
-position: relative;
-z-index: 2;
-padding: 0 16px;
-}
-
-.round-title {
-text-align: center;
-font-size: 11px;
-color: rgba(201,168,76,0.5);
-letter-spacing: 2px;
-margin-bottom: 12px;
-text-transform: uppercase;
-}
-
-.entry-grid {
-display: grid;
-grid-template-columns: 1fr 1fr;
-gap: 10px;
-margin-bottom: 12px;
-}
-
-.entry-group {
-display: flex;
-flex-direction: column;
-gap: 5px;
-}
-
-.entry-label {
-font-size: 9px;
-color: rgba(201,168,76,0.5);
-letter-spacing: 1.5px;
-text-transform: uppercase;
-text-align: center;
-}
-
-.entry-input {
-background: rgba(255,255,255,0.04);
-border: 1px solid var(–border);
-border-radius: 10px;
-color: var(–cream);
-font-family: ‘Cinzel’, serif;
-font-size: 22px;
-text-align: center;
-padding: 12px 8px;
-outline: none;
-transition: all 0.2s;
-width: 100%;
--moz-appearance: textfield;
-}
-
-.entry-input::-webkit-inner-spin-button,
-.entry-input::-webkit-outer-spin-button { -webkit-appearance: none; }
-
-.entry-input:focus {
-border-color: var(–gold);
-background: rgba(201,168,76,0.07);
-box-shadow: 0 0 0 3px rgba(201,168,76,0.08);
-}
-
-/* Bid section */
-.bid-section {
-background: rgba(139,26,26,0.08);
-border: 1px solid rgba(139,26,26,0.2);
-border-radius: 10px;
-padding: 10px 12px;
-margin-bottom: 12px;
-}
-
-.bid-header {
-display: flex;
-justify-content: space-between;
-align-items: center;
-margin-bottom: 8px;
-}
-
-.bid-label {
-font-size: 9px;
-color: rgba(201,168,76,0.5);
-letter-spacing: 1.5px;
-text-transform: uppercase;
-}
-
-.bid-controls {
-display: grid;
-grid-template-columns: 1fr auto 1fr;
-gap: 8px;
-align-items: center;
-}
-
-.bid-select {
-background: rgba(255,255,255,0.04);
-border: 1px solid var(–border);
-border-radius: 8px;
-color: var(–cream);
-font-family: ‘Cinzel’, serif;
-font-size: 16px;
-padding: 8px 6px;
-text-align: center;
-outline: none;
-width: 100%;
--webkit-appearance: none;
-cursor: pointer;
-}
-
-.bid-select option { background: #1a1209; }
-
-.bid-team-select {
-background: rgba(255,255,255,0.04);
-border: 1px solid var(–border);
-border-radius: 8px;
-color: var(–gold);
-font-family: ‘Cinzel’, serif;
-font-size: 16px;
-padding: 8px 6px;
-text-align: center;
-outline: none;
-width: 100%;
--webkit-appearance: none;
-cursor: pointer;
-grid-column: 1 / -1;
-}
-
-.bid-team-select option { background: #1a1209; }
-
-.vs-badge {
-font-size: 9px;
-color: rgba(201,168,76,0.4);
-letter-spacing: 1px;
-text-align: center;
-}
-
-/* Toggles row */
-.toggles-row {
-display: flex;
-gap: 8px;
-margin-bottom: 12px;
-}
-
-.toggle-btn {
-flex: 1;
-background: rgba(255,255,255,0.03);
-border: 1px solid var(–border);
-border-radius: 8px;
-color: rgba(201,168,76,0.4);
-font-family: ‘Cinzel’, serif;
-font-size: 10px;
-padding: 9px 4px;
-cursor: pointer;
-text-align: center;
-letter-spacing: 0.5px;
-transition: all 0.2s;
-line-height: 1.3;
-}
-
-.toggle-btn.active {
-background: rgba(201,168,76,0.12);
-border-color: rgba(201,168,76,0.5);
-color: var(–gold2);
-box-shadow: 0 0 12px rgba(201,168,76,0.1);
-}
-
-.toggle-btn .btn-icon { font-size: 14px; display: block; margin-bottom: 2px; }
-
-/* Add Round Btn */
-.add-btn {
-width: 100%;
-background: linear-gradient(135deg, rgba(201,168,76,0.15), rgba(201,168,76,0.08));
-border: 1px solid rgba(201,168,76,0.4);
-border-radius: 12px;
-color: var(–gold2);
-font-family: ‘Cinzel’, serif;
-font-size: 14px;
-letter-spacing: 2px;
-padding: 14px;
-cursor: pointer;
-transition: all 0.2s;
-text-transform: uppercase;
-margin-bottom: 4px;
-position: relative;
-overflow: hidden;
-}
-
-.add-btn::before {
-content: ‘’;
-position: absolute;
-top: 50%; left: 50%;
-width: 0; height: 0;
-background: rgba(201,168,76,0.15);
-border-radius: 50%;
-transform: translate(-50%, -50%);
-transition: width 0.4s, height 0.4s;
-}
-
-.add-btn:active::before { width: 300px; height: 300px; }
-.add-btn:active { transform: scale(0.98); }
-
-/* History */
-.history-section {
-position: relative;
-z-index: 2;
-padding: 0 16px;
-margin-top: 8px;
-}
-
-.history-header {
-display: flex;
-justify-content: space-between;
-align-items: center;
-margin-bottom: 10px;
-}
-
-.history-title {
-font-size: 9px;
-color: rgba(201,168,76,0.4);
-letter-spacing: 2px;
-text-transform: uppercase;
-}
-
-.clear-btn {
-font-family: ‘Cinzel’, serif;
-font-size: 9px;
-color: rgba(192,57,43,0.5);
-background: none;
-border: 1px solid rgba(192,57,43,0.2);
-border-radius: 6px;
-padding: 4px 8px;
-cursor: pointer;
-letter-spacing: 1px;
-transition: all 0.2s;
-}
-
-.clear-btn:hover { color: var(–red2); border-color: rgba(192,57,43,0.5); }
-
-.rounds-list {
-display: flex;
-flex-direction: column;
-gap: 6px;
-max-height: 260px;
-overflow-y: auto;
-padding-right: 2px;
-}
-
-.rounds-list::-webkit-scrollbar { width: 3px; }
-.rounds-list::-webkit-scrollbar-track { background: transparent; }
-.rounds-list::-webkit-scrollbar-thumb { background: rgba(201,168,76,0.2); border-radius: 10px; }
-
-.round-row {
-background: rgba(255,255,255,0.025);
-border: 1px solid rgba(255,255,255,0.06);
-border-radius: 10px;
-padding: 10px 12px;
-display: grid;
-grid-template-columns: 24px 1fr auto 1fr auto;
-align-items: center;
-gap: 6px;
-animation: slideIn 0.25s ease;
-}
-
-@keyframes slideIn {
-from { opacity: 0; transform: translateY(-8px); }
-to { opacity: 1; transform: translateY(0); }
-}
-
-.round-num {
-font-size: 9px;
-color: rgba(201,168,76,0.3);
-text-align: center;
-border: 1px solid rgba(201,168,76,0.15);
-border-radius: 50%;
-width: 20px; height: 20px;
-display: flex; align-items: center; justify-content: center;
-}
-
-.round-team {
-font-size: 11px;
-color: var(–cream);
-opacity: 0.8;
-text-align: center;
-}
-
-.round-pts {
-font-family: ‘Cinzel Decorative’, serif;
-font-size: 16px;
-text-align: center;
-}
-
-.round-pts.t1 { color: var(–gold2); }
-.round-pts.t2 { color: var(–red2); }
-
-.round-sep {
-font-size: 9px;
-color: rgba(255,255,255,0.15);
-text-align: center;
-}
-
-.round-tags {
-display: flex;
-gap: 3px;
-flex-wrap: wrap;
-justify-content: center;
-grid-column: 2 / -1;
-margin-top: 2px;
-}
-
-.tag {
-font-size: 8px;
-padding: 2px 6px;
-border-radius: 10px;
-letter-spacing: 0.5px;
-}
-
-.tag.bid { background: rgba(139,26,26,0.3); color: rgba(255,150,130,0.8); border: 1px solid rgba(139,26,26,0.3); }
-.tag.double { background: rgba(201,168,76,0.12); color: rgba(201,168,76,0.7); border: 1px solid rgba(201,168,76,0.2); }
-.tag.redouble { background: rgba(192,57,43,0.15); color: rgba(231,76,60,0.8); border: 1px solid rgba(192,57,43,0.25); }
-.tag.hokm { background: rgba(20,80,40,0.3); color: rgba(80,200,120,0.8); border: 1px solid rgba(20,80,40,0.4); }
-
-.del-round {
-background: none;
-border: none;
-color: rgba(192,57,43,0.3);
-cursor: pointer;
-font-size: 14px;
-padding: 2px;
-transition: color 0.2s;
-grid-column: -1;
-}
-
-.del-round:active { color: var(–red2); }
-
-/* Winner Modal */
-.winner-overlay {
-position: fixed;
-inset: 0;
-background: rgba(0,0,0,0.85);
-z-index: 100;
-display: flex;
-align-items: center;
-justify-content: center;
-opacity: 0;
-pointer-events: none;
-transition: opacity 0.4s;
-backdrop-filter: blur(4px);
-}
-
-.winner-overlay.show {
-opacity: 1;
-pointer-events: all;
-}
-
-.winner-card {
-background: linear-gradient(160deg, #1c1206 0%, #0d1a0e 100%);
-border: 1px solid var(–gold);
-border-radius: 20px;
-padding: 36px 28px;
-text-align: center;
-max-width: 300px;
-width: 85%;
-box-shadow: 0 0 60px rgba(201,168,76,0.2);
-transform: scale(0.85);
-transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
-}
-
-.winner-overlay.show .winner-card { transform: scale(1); }
-
-.winner-suits {
-font-size: 28px;
-margin-bottom: 12px;
-letter-spacing: 8px;
-}
-
-.winner-label {
-font-size: 10px;
-color: rgba(201,168,76,0.5);
-letter-spacing: 3px;
-text-transform: uppercase;
-margin-bottom: 8px;
-}
-
-.winner-name {
-font-family: ‘Cinzel Decorative’, serif;
-font-size: 28px;
-background: linear-gradient(135deg, var(–gold), var(–gold2));
--webkit-background-clip: text;
--webkit-text-fill-color: transparent;
-background-clip: text;
-margin-bottom: 20px;
-}
-
-.winner-score {
-font-family: ‘Amiri’, serif;
-font-size: 15px;
-color: rgba(201,168,76,0.6);
-margin-bottom: 24px;
-}
-
-.new-game-btn {
-background: linear-gradient(135deg, var(–gold), rgba(201,168,76,0.7));
-border: none;
-border-radius: 10px;
-color: var(–dark);
-font-family: ‘Cinzel’, serif;
-font-size: 13px;
-font-weight: 600;
-letter-spacing: 2px;
-padding: 13px 28px;
-cursor: pointer;
-text-transform: uppercase;
-transition: all 0.2s;
-}
-
-.new-game-btn:active { transform: scale(0.97); }
-
-/* Settings row */
-.settings-row {
-position: relative;
-z-index: 2;
-display: flex;
-gap: 8px;
-padding: 12px 16px 0;
-align-items: center;
-justify-content: space-between;
-}
-
-.target-input-wrap {
-display: flex;
-align-items: center;
-gap: 6px;
-background: rgba(255,255,255,0.03);
-border: 1px solid var(–border);
-border-radius: 8px;
-padding: 6px 10px;
-flex: 1;
-}
-
-.target-lbl { font-size: 9px; color: rgba(201,168,76,0.4); letter-spacing: 1px; text-transform: uppercase; }
-
-.target-input {
-background: none;
-border: none;
-color: var(–gold);
-font-family: ‘Cinzel’, serif;
-font-size: 16px;
-text-align: right;
-width: 50px;
-outline: none;
--moz-appearance: textfield;
-}
-
-.target-input::-webkit-inner-spin-button,
-.target-input::-webkit-outer-spin-button { -webkit-appearance: none; }
-
-.reset-btn {
-background: rgba(192,57,43,0.08);
-border: 1px solid rgba(192,57,43,0.2);
-border-radius: 8px;
-color: rgba(192,57,43,0.5);
-font-family: ‘Cinzel’, serif;
-font-size: 10px;
-padding: 8px 12px;
-cursor: pointer;
-letter-spacing: 1px;
-transition: all 0.2s;
-}
-
-.reset-btn:active { background: rgba(192,57,43,0.2); color: var(–red2); }
-
+/* ─── RESET ─── */
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent;-webkit-touch-callout:none;-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale}
+/* ─── VARIABLES ─── */
+:root{
+  --gold:#c9a84c;--gold2:#e8c96a;
+  --red:#b83227;--red2:#d94535;
+  --cream:#f0e2c4;--dark:#0d0a07;
+  --border:rgba(201,168,76,.28);
+  --r:13px;
+  --st:env(safe-area-inset-top,0px);
+  --sb:env(safe-area-inset-bottom,0px);
+}
+/* ─── FOUNDATION ─── */
+html,body{height:100%;background:#0d0a07;overscroll-behavior:none}
+body{font-family:'Cinzel',serif;display:-webkit-flex;display:flex;-webkit-justify-content:center;justify-content:center}
+/* ─── APP SHELL ─── */
+#app{
+  width:100%;max-width:430px;min-height:100%;
+  background:#0f130c;
+  background-image:
+    radial-gradient(ellipse 70% 40% at 15% 8%,rgba(120,20,20,.10) 0%,transparent 100%),
+    radial-gradient(ellipse 60% 60% at 85% 88%,rgba(10,30,15,.55) 0%,transparent 100%);
+  display:-webkit-flex;display:flex;
+  -webkit-flex-direction:column;flex-direction:column;
+  position:relative;overflow-x:hidden;
+  padding-bottom:calc(28px + var(--sb));
+}
+/* dot texture */
+#app::after{
+  content:'';position:fixed;inset:0;max-width:430px;
+  background-image:radial-gradient(circle,rgba(255,255,255,.018) 1px,transparent 1px);
+  background-size:6px 6px;pointer-events:none;z-index:0;
+}
+#app>*{position:relative;z-index:1}
+
+/* ─── HEADER ─── */
+.hdr{
+padding:calc(var(–st) + 22px) 20px 18px;
+text-align:center;
+border-bottom:1px solid var(–border);
+background:linear-gradient(180deg,rgba(201,168,76,.07) 0%,transparent 100%);
+-webkit-flex-shrink:0;flex-shrink:0;
+}
+.hdr-suits{display:-webkit-flex;display:flex;-webkit-justify-content:center;justify-content:center;gap:12px;margin-bottom:6px;font-size:17px;line-height:1}
+.sb{color:#ddd}.sr{color:#d94535}
+/* Title — gradient text with Firefox fallback */
+.hdr-title{
+font-family:‘Cinzel Decorative’,serif;font-size:24px;
+letter-spacing:4px;color:#e8c96a;
+background:linear-gradient(135deg,#c9a84c 0%,#e8c96a 50%,#c9a84c 100%);
+-webkit-background-clip:text;-webkit-text-fill-color:transparent;
+background-clip:text;
+}
+.hdr-sub{font-family:‘Amiri’,serif;font-size:13px;color:rgba(201,168,76,.42);letter-spacing:2px;margin-top:3px}
+
+/* ─── SETTINGS ─── */
+.settings{display:-webkit-flex;display:flex;gap:8px;padding:12px 14px 0;-webkit-align-items:center;align-items:center}
+.tgt-wrap{
+-webkit-flex:1;flex:1;display:-webkit-flex;display:flex;
+-webkit-align-items:center;align-items:center;gap:8px;
+background:rgba(255,255,255,.03);border:1px solid var(–border);
+border-radius:10px;padding:9px 12px;min-width:0;
+}
+.tgt-lbl{font-size:10px;color:rgba(201,168,76,.38);letter-spacing:1px;text-transform:uppercase;white-space:nowrap}
+/* Fully normalised number input */
+.tgt-input{
+-webkit-flex:1;flex:1;background:transparent;border:none;outline:none;
+color:var(–gold2);font-family:‘Cinzel’,serif;font-size:16px;
+text-align:right;width:0;min-width:0;
+-webkit-appearance:none;-moz-appearance:textfield;appearance:none;
+}
+.tgt-input::-webkit-inner-spin-button,.tgt-input::-webkit-outer-spin-button{display:none}
+.reset-btn{
+background:rgba(180,40,30,.09);border:1px solid rgba(180,40,30,.22);
+border-radius:10px;color:rgba(210,80,60,.62);
+font-family:‘Cinzel’,serif;font-size:11px;letter-spacing:1px;
+padding:10px 14px;cursor:pointer;white-space:nowrap;
+-webkit-appearance:none;appearance:none;
+}
+.reset-btn:active{background:rgba(180,40,30,.20);color:#e74c3c}
+
+/* ─── SCOREBOARD ─── */
+.scoreboard{
+display:-webkit-flex;display:flex;gap:10px;padding:12px 14px 0;
+}
+.tcard{
+-webkit-flex:1;flex:1;
+background:rgba(255,255,255,.03);
+border:1.5px solid var(–border);border-radius:var(–r);
+padding:13px 10px 12px;text-align:center;
+position:relative;overflow:hidden;
+-webkit-transition:border-color .3s,box-shadow .3s;transition:border-color .3s,box-shadow .3s;
+}
+.tcard::before{
+content:’’;position:absolute;top:0;left:10%;right:10%;height:2px;
+background:linear-gradient(90deg,transparent,var(–gold),transparent);
+opacity:0;-webkit-transition:opacity .3s;transition:opacity .3s;
+}
+.tcard.win{border-color:rgba(201,168,76,.55);box-shadow:0 0 18px rgba(201,168,76,.10)}
+.tcard.win::before{opacity:1}
+/* Team name text input — fully styled, no browser chrome */
+.tname{
+font-family:‘Amiri’,serif;font-size:16px;font-weight:700;
+color:var(–cream);background:transparent;border:none;
+border-bottom:1px solid rgba(201,168,76,.22);
+text-align:center;width:100%;outline:none;
+padding:2px 4px 3px;margin-bottom:10px;display:block;
+-webkit-appearance:none;appearance:none;
+letter-spacing:.3px;
+}
+.tname::placeholder{color:rgba(201,168,76,.25)}
+.tscore{
+font-family:‘Cinzel Decorative’,serif;font-size:44px;
+line-height:1;color:var(–gold);display:inline-block;
+-webkit-transition:color .3s;transition:color .3s;
+}
+.tcard.win .tscore{color:#fff}
+.twins{margin-top:6px;font-size:10px;color:rgba(201,168,76,.38);letter-spacing:1px;text-transform:uppercase}
+.twins b{color:var(–gold);font-weight:600}
+
+/* ─── PROGRESS ─── */
+.prog-sec{padding:10px 14px 0}
+.prog-row{display:-webkit-flex;display:flex;-webkit-align-items:center;align-items:center;gap:8px;margin-bottom:5px}
+.prog-name{font-size:10px;color:rgba(201,168,76,.38);letter-spacing:.5px;min-width:50px;max-width:72px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.prog-track{-webkit-flex:1;flex:1;height:5px;background:rgba(255,255,255,.05);border-radius:10px;overflow:hidden;border:1px solid rgba(255,255,255,.04)}
+.prog-fill{height:100%;border-radius:10px;-webkit-transition:width .5s ease;transition:width .5s ease;width:0}
+.f1{background:linear-gradient(90deg,#b8860b,#e8c96a)}
+.f2{background:linear-gradient(90deg,#8b1a1a,#d94535)}
+.prog-val{font-size:10px;color:rgba(201,168,76,.32);min-width:28px;text-align:right}
+
+/* ─── DIVIDER ─── */
+.div{display:-webkit-flex;display:flex;-webkit-align-items:center;align-items:center;gap:8px;padding:14px 14px 8px}
+.div-line{-webkit-flex:1;flex:1;height:1px;background:linear-gradient(90deg,transparent,rgba(201,168,76,.18),transparent)}
+.div-txt{font-size:9px;color:rgba(201,168,76,.32);letter-spacing:2px;text-transform:uppercase;white-space:nowrap}
+
+/* ─── ENTRY ─── */
+.entry-sec{padding:0 14px}
+.entry-grid{display:-webkit-flex;display:flex;gap:10px;margin-bottom:10px}
+.eg{-webkit-flex:1;flex:1;display:-webkit-flex;display:flex;-webkit-flex-direction:column;flex-direction:column;gap:5px}
+.elbl{font-size:9px;color:rgba(201,168,76,.42);letter-spacing:1.5px;text-transform:uppercase;text-align:center}
+/* Score inputs — fully normalised */
+.einput{
+background:rgba(255,255,255,.04);
+border:1.5px solid var(–border);
+border-radius:11px;color:var(–cream);
+font-family:‘Cinzel’,serif;font-size:26px;
+text-align:center;padding:13px 6px;
+outline:none;width:100%;display:block;
+-webkit-appearance:none;-moz-appearance:textfield;appearance:none;
+-webkit-transition:border-color .2s,background .2s;transition:border-color .2s,background .2s;
+}
+.einput::-webkit-inner-spin-button,.einput::-webkit-outer-spin-button{display:none}
+.einput:focus{border-color:rgba(201,168,76,.62);background:rgba(201,168,76,.06)}
+
+/* BID BOX */
+.bid-box{
+background:rgba(100,10,10,.09);border:1px solid rgba(110,15,15,.22);
+border-radius:11px;padding:10px 12px;margin-bottom:10px;
+}
+.bid-lbl{font-size:9px;color:rgba(201,168,76,.38);letter-spacing:1.5px;text-transform:uppercase;margin-bottom:7px}
+/* Fully custom select across all browsers */
+.sel-wrap{position:relative}
+.sel-wrap::after{
+content:‘▾’;position:absolute;right:12px;top:50%;
+-webkit-transform:translateY(-50%);transform:translateY(-50%);
+color:rgba(201,168,76,.38);font-size:12px;pointer-events:none;line-height:1;
+}
+.bid-sel{
+width:100%;background:rgba(255,255,255,.04);
+border:1px solid var(–border);border-radius:9px;
+color:var(–gold2);font-family:‘Cinzel’,serif;font-size:16px;
+padding:10px 32px 10px 12px;outline:none;cursor:pointer;
+-webkit-appearance:none;-moz-appearance:none;appearance:none;display:block;
+}
+.bid-sel::-ms-expand{display:none}
+.bid-sel option{background:#18120a;color:var(–cream)}
+
+/* TOGGLES */
+.toggles{display:-webkit-flex;display:flex;gap:8px;margin-bottom:10px}
+.tog{
+-webkit-flex:1;flex:1;
+background:rgba(255,255,255,.03);
+border:1px solid rgba(201,168,76,.18);border-radius:10px;
+color:rgba(201,168,76,.32);font-family:‘Cinzel’,serif;
+font-size:10px;letter-spacing:.5px;
+padding:10px 4px 8px;cursor:pointer;text-align:center;line-height:1.4;
+-webkit-appearance:none;appearance:none;display:block;width:100%;
+-webkit-transition:background .18s,border-color .18s,color .18s;
+transition:background .18s,border-color .18s,color .18s;
+}
+.tog-icon{font-size:15px;display:block;margin-bottom:2px}
+.tog.on{background:rgba(201,168,76,.11);border-color:rgba(201,168,76,.48);color:var(–gold2)}
+.tog:active{opacity:.72}
+
+/* ADD BUTTON */
+.add-btn{
+width:100%;background:rgba(201,168,76,.10);
+border:1.5px solid rgba(201,168,76,.35);border-radius:13px;
+color:var(–gold2);font-family:‘Cinzel’,serif;font-size:14px;
+letter-spacing:2px;text-transform:uppercase;padding:15px;
+cursor:pointer;-webkit-appearance:none;appearance:none;display:block;
+-webkit-transition:background .18s,-webkit-transform .12s;transition:background .18s,transform .12s;
+}
+.add-btn:active{background:rgba(201,168,76,.18);-webkit-transform:scale(.98);transform:scale(.98)}
+
+/* ─── HISTORY ─── */
+.hist-sec{padding:0 14px}
+.hist-hdr{display:-webkit-flex;display:flex;-webkit-justify-content:space-between;justify-content:space-between;-webkit-align-items:center;align-items:center;margin-bottom:8px}
+.hist-ttl{font-size:9px;color:rgba(201,168,76,.32);letter-spacing:2px;text-transform:uppercase}
+.clr-btn{
+font-family:‘Cinzel’,serif;font-size:9px;letter-spacing:1px;
+color:rgba(190,50,40,.48);background:rgba(190,50,40,.06);
+border:1px solid rgba(190,50,40,.16);border-radius:6px;
+padding:5px 9px;cursor:pointer;-webkit-appearance:none;appearance:none;
+}
+.clr-btn:active{color:#e74c3c;background:rgba(190,50,40,.14)}
+.rlist{
+display:-webkit-flex;display:flex;-webkit-flex-direction:column;flex-direction:column;
+gap:6px;max-height:240px;overflow-y:auto;
+-webkit-overflow-scrolling:touch;overscroll-behavior:contain;padding-right:2px;
+}
+.rlist::-webkit-scrollbar{width:3px}
+.rlist::-webkit-scrollbar-track{background:transparent}
+.rlist::-webkit-scrollbar-thumb{background:rgba(201,168,76,.14);border-radius:10px}
+/* Round row */
+.rrow{
+background:rgba(255,255,255,.025);border:1px solid rgba(255,255,255,.052);
+border-radius:10px;padding:9px 10px;
+display:-webkit-flex;display:flex;-webkit-align-items:center;align-items:center;
+gap:6px;-webkit-flex-wrap:wrap;flex-wrap:wrap;
+-webkit-animation:sIn .22s ease;animation:sIn .22s ease;
+}
+@-webkit-keyframes sIn{from{opacity:0;-webkit-transform:translateY(-6px)}to{opacity:1;-webkit-transform:none}}
+@keyframes sIn{from{opacity:0;transform:translateY(-6px)}to{opacity:1;transform:none}}
+.rn{
+font-size:9px;color:rgba(201,168,76,.28);
+border:1px solid rgba(201,168,76,.10);border-radius:50%;
+width:20px;height:20px;display:-webkit-flex;display:flex;
+-webkit-align-items:center;align-items:center;-webkit-justify-content:center;justify-content:center;
+-webkit-flex-shrink:0;flex-shrink:0;
+}
+.rt{-webkit-flex:1;flex:1;font-size:10px;color:rgba(240,226,196,.52);text-align:center;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.rp{font-family:‘Cinzel Decorative’,serif;font-size:17px;min-width:34px;text-align:center}
+.rp.g{color:var(–gold2)}.rp.r{color:var(–red2)}
+.rsep{font-size:10px;color:rgba(255,255,255,.10)}
+.rdel{background:none;border:none;color:rgba(190,50,40,.28);font-size:14px;padding:3px 4px;cursor:pointer;-webkit-appearance:none;appearance:none;-webkit-flex-shrink:0;flex-shrink:0;line-height:1}
+.rdel:active{color:#e74c3c}
+.rtags{width:100%;display:-webkit-flex;display:flex;gap:4px;-webkit-flex-wrap:wrap;flex-wrap:wrap;margin-top:3px;padding-left:26px}
+.tag{font-size:9px;padding:2px 7px;border-radius:20px;letter-spacing:.5px;font-family:‘Cinzel’,serif}
+.tag.bid{background:rgba(100,10,10,.28);color:rgba(255,130,110,.78);border:1px solid rgba(100,10,10,.28)}
+.tag.dbl{background:rgba(170,130,35,.12);color:rgba(215,185,70,.72);border:1px solid rgba(170,130,35,.20)}
+.tag.rdbl{background:rgba(170,35,25,.12);color:rgba(215,70,55,.78);border:1px solid rgba(170,35,25,.20)}
+.tag.hkm{background:rgba(12,65,32,.24);color:rgba(65,185,105,.78);border:1px solid rgba(12,65,32,.32)}
 /* Empty state */
-.empty-state {
-text-align: center;
-padding: 24px 16px;
-color: rgba(201,168,76,0.2);
-font-size: 11px;
-letter-spacing: 1px;
+.empty{text-align:center;padding:22px 0;color:rgba(201,168,76,.17);font-size:11px;letter-spacing:1px}
+.empty-ic{font-size:28px;display:block;margin-bottom:6px;opacity:.3}
+
+/* ─── WINNER MODAL ─── */
+.overlay{
+position:fixed;inset:0;background:rgba(0,0,0,.82);z-index:999;
+display:-webkit-flex;display:flex;-webkit-align-items:center;align-items:center;-webkit-justify-content:center;justify-content:center;
+opacity:0;pointer-events:none;
+-webkit-transition:opacity .35s;transition:opacity .35s;
+-webkit-backdrop-filter:blur(5px);backdrop-filter:blur(5px);
 }
-
-.empty-state .empty-icon { font-size: 32px; margin-bottom: 8px; opacity: 0.3; }
-
-/* Notification toast */
-.toast {
-position: fixed;
-bottom: 30px;
-left: 50%;
-transform: translateX(-50%) translateY(80px);
-background: rgba(201,168,76,0.15);
-border: 1px solid rgba(201,168,76,0.4);
-border-radius: 20px;
-padding: 10px 20px;
-color: var(–gold2);
-font-size: 12px;
-letter-spacing: 1px;
-z-index: 200;
-transition: transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
-white-space: nowrap;
-backdrop-filter: blur(8px);
+.overlay.show{opacity:1;pointer-events:all}
+.wcard{
+background:linear-gradient(160deg,#1c1206 0%,#0c180d 100%);
+border:1px solid var(–gold);border-radius:20px;
+padding:34px 28px 28px;text-align:center;
+width:min(300px,84vw);
+box-shadow:0 0 60px rgba(201,168,76,.18),0 20px 60px rgba(0,0,0,.6);
+-webkit-transform:scale(.88);transform:scale(.88);
+-webkit-transition:-webkit-transform .4s cubic-bezier(.34,1.56,.64,1);transition:transform .4s cubic-bezier(.34,1.56,.64,1);
 }
-
-.toast.show { transform: translateX(-50%) translateY(0); }
-
-.score-flash {
-animation: flash 0.4s ease;
+.overlay.show .wcard{-webkit-transform:scale(1);transform:scale(1)}
+.wsuits{font-size:26px;letter-spacing:10px;margin-bottom:12px}
+.wlbl{font-size:9px;color:rgba(201,168,76,.42);letter-spacing:3px;text-transform:uppercase;margin-bottom:8px}
+.wname{font-family:‘Cinzel Decorative’,serif;font-size:26px;color:var(–gold2);margin-bottom:8px;word-break:break-word}
+.wscore{font-family:‘Amiri’,serif;font-size:16px;color:rgba(201,168,76,.48);margin-bottom:22px}
+.ng-btn{
+background:linear-gradient(135deg,#c9a84c,rgba(201,168,76,.72));
+border:none;border-radius:11px;color:#1a1209;
+font-family:‘Cinzel’,serif;font-size:13px;font-weight:600;
+letter-spacing:2px;text-transform:uppercase;padding:13px 32px;
+cursor:pointer;-webkit-appearance:none;appearance:none;
 }
+.ng-btn:active{opacity:.82}
 
-@keyframes flash {
-0%, 100% { transform: scale(1); }
-50% { transform: scale(1.15); }
+/* ─── TOAST ─── */
+.toast{
+position:fixed;bottom:calc(24px + var(–sb));left:50%;
+-webkit-transform:translateX(-50%) translateY(70px);transform:translateX(-50%) translateY(70px);
+background:rgba(18,14,8,.93);border:1px solid rgba(201,168,76,.32);
+border-radius:20px;padding:10px 20px;color:var(–gold2);
+font-size:12px;letter-spacing:1px;z-index:1000;white-space:nowrap;
+-webkit-transition:-webkit-transform .32s cubic-bezier(.34,1.56,.64,1);transition:transform .32s cubic-bezier(.34,1.56,.64,1);
+-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px);
+box-shadow:0 4px 20px rgba(0,0,0,.5);
 }
+.toast.show{-webkit-transform:translateX(-50%) translateY(0);transform:translateX(-50%) translateY(0)}
 
-/* Confetti */
-.confetti-piece {
-position: fixed;
-width: 8px;
-height: 8px;
-border-radius: 2px;
-z-index: 150;
-animation: confettiFall linear forwards;
-pointer-events: none;
-}
+/* ─── FLASH ANIMATION ─── */
+@-webkit-keyframes flash{0%,100%{-webkit-transform:scale(1)}45%{-webkit-transform:scale(1.14)}}
+@keyframes flash{0%,100%{transform:scale(1)}45%{transform:scale(1.14)}}
+.flash{display:inline-block;-webkit-animation:flash .36s ease;animation:flash .36s ease}
 
-@keyframes confettiFall {
-0% { transform: translateY(-20px) rotate(0deg); opacity: 1; }
-100% { transform: translateY(100vh) rotate(720deg); opacity: 0; }
-}
+/* ─── CONFETTI ─── */
+.cfp{position:fixed;width:8px;height:8px;border-radius:2px;pointer-events:none;z-index:998}
+@-webkit-keyframes cf{from{opacity:1;-webkit-transform:translateY(-20px) rotate(0deg)}to{opacity:0;-webkit-transform:translateY(110vh) rotate(720deg)}}
+@keyframes cf{from{opacity:1;transform:translateY(-20px) rotate(0deg)}to{opacity:0;transform:translateY(110vh) rotate(720deg)}}
 </style>
 
 </head>
 <body>
-<div class="app">
+<div id="app">
 
-  <div class="header">
-    <div class="header-suits">
-      <span class="suit-♠">♠</span>
-      <span class="suit-♥">♥</span>
-      <span class="suit-♦">♦</span>
-      <span class="suit-♣">♣</span>
+  <!-- HEADER -->
+
+  <div class="hdr">
+    <div class="hdr-suits">
+      <span class="sb">♠</span><span class="sr">♥</span>
+      <span class="sr">♦</span><span class="sb">♣</span>
     </div>
-    <h1>BALOT</h1>
-    <div class="header-sub">حاسبة البالوت</div>
+    <div class="hdr-title">BALOT</div>
+    <div class="hdr-sub">حاسبة البالوت</div>
   </div>
 
-  <!-- Settings Row -->
+  <!-- SETTINGS -->
 
-  <div class="settings-row">
-    <div class="target-input-wrap">
-      <span class="target-lbl">Target</span>
-      <input type="number" class="target-input" id="targetScore" value="152" min="50" max="500" inputmode="numeric" pattern="[0-9]*">
+  <div class="settings">
+    <div class="tgt-wrap">
+      <span class="tgt-lbl">Target</span>
+      <input class="tgt-input" id="tgt" type="number" value="152"
+             inputmode="numeric" pattern="[0-9]*" min="50" max="999">
     </div>
-    <button class="reset-btn" onclick="resetGame()">↺ Reset</button>
+    <button class="reset-btn" onclick="resetGame()">&#8635; Reset</button>
   </div>
 
-  <!-- Scoreboard -->
+  <!-- SCOREBOARD -->
 
   <div class="scoreboard">
-    <div class="team-card" id="team1Card">
-      <div class="team-name-row">
-        <input class="team-name-input" id="team1Name" value="فريق ١" placeholder="Team 1">
-      </div>
-      <div class="total-score" id="score1">0</div>
-      <div class="rounds-won">Rounds: <span id="wins1">0</span></div>
+    <div class="tcard" id="c1">
+      <input class="tname" id="n1" value="فريق ١" placeholder="Team 1">
+      <div class="tscore" id="s1">0</div>
+      <div class="twins">Rounds: <b id="w1">0</b></div>
     </div>
-    <div class="team-card" id="team2Card">
-      <div class="team-name-row">
-        <input class="team-name-input" id="team2Name" value="فريق ٢" placeholder="Team 2">
-      </div>
-      <div class="total-score" id="score2">0</div>
-      <div class="rounds-won">Rounds: <span id="wins2">0</span></div>
+    <div class="tcard" id="c2">
+      <input class="tname" id="n2" value="فريق ٢" placeholder="Team 2">
+      <div class="tscore" id="s2">0</div>
+      <div class="twins">Rounds: <b id="w2">0</b></div>
     </div>
   </div>
 
-  <!-- Progress Bars -->
+  <!-- PROGRESS -->
 
-  <div class="target-bar">
-    <div class="progress-wrap">
-      <div id="progressFill1" class="progress-fill" style="width:0%"></div>
+  <div class="prog-sec">
+    <div class="prog-row">
+      <span class="prog-name" id="pn1">فريق ١</span>
+      <div class="prog-track"><div class="prog-fill f1" id="pb1"></div></div>
+      <span class="prog-val" id="pv1">0</span>
     </div>
-    <div class="progress-labels">
-      <span id="t1Name">فريق ١</span>
-      <span id="targetLabel">/ 152</span>
-    </div>
-    <div class="progress-wrap" style="margin-top:5px">
-      <div id="progressFill2" class="progress-fill team2" style="width:0%; float:right"></div>
-    </div>
-    <div class="progress-labels">
-      <span id="t2Name">فريق ٢</span>
-      <span></span>
+    <div class="prog-row">
+      <span class="prog-name" id="pn2">فريق ٢</span>
+      <div class="prog-track"><div class="prog-fill f2" id="pb2"></div></div>
+      <span class="prog-val" id="pv2">0</span>
     </div>
   </div>
 
-  <div class="divider">
-    <div class="divider-line"></div>
-    <span class="divider-text">New Round</span>
-    <div class="divider-line"></div>
-  </div>
+  <!-- DIVIDER -->
 
-  <!-- Round Entry -->
+  <div class="div"><div class="div-line"></div><span class="div-txt">New Round</span><div class="div-line"></div></div>
 
-  <div class="round-entry">
+  <!-- ENTRY -->
+
+  <div class="entry-sec">
     <div class="entry-grid">
-      <div class="entry-group">
-        <span class="entry-label" id="label1">فريق ١</span>
-        <input type="number" class="entry-input" id="input1" placeholder="0" min="0" max="162" inputmode="numeric" pattern="[0-9]*">
+      <div class="eg">
+        <span class="elbl" id="l1">فريق ١</span>
+        <input class="einput" id="i1" type="number" inputmode="numeric" pattern="[0-9]*" placeholder="0" min="0" max="162">
       </div>
-      <div class="entry-group">
-        <span class="entry-label" id="label2">فريق ٢</span>
-        <input type="number" class="entry-input" id="input2" placeholder="0" min="0" max="162" inputmode="numeric" pattern="[0-9]*">
+      <div class="eg">
+        <span class="elbl" id="l2">فريق ٢</span>
+        <input class="einput" id="i2" type="number" inputmode="numeric" pattern="[0-9]*" placeholder="0" min="0" max="162">
       </div>
     </div>
 
 ```
-<!-- Bid Section -->
-<div class="bid-section">
-  <div class="bid-header">
-    <span class="bid-label">♚ Bid (حكم)</span>
+<div class="bid-box">
+  <div class="bid-lbl">&#9818; Bid Team (حكم)</div>
+  <div class="sel-wrap">
+    <select class="bid-sel" id="bid">
+      <option value="">No Bid</option>
+      <option value="1">فريق ١ — Bid</option>
+      <option value="2">فريق ٢ — Bid</option>
+    </select>
   </div>
-  <select class="bid-team-select" id="bidTeam">
-    <option value="">No Bid</option>
-    <option value="1">فريق ١ Bid</option>
-    <option value="2">فريق ٢ Bid</option>
-  </select>
 </div>
 
-<!-- Toggles -->
-<div class="toggles-row">
-  <button class="toggle-btn" id="btnDouble" onclick="toggleOpt('double')">
-    <span class="btn-icon">×2</span>Double
-  </button>
-  <button class="toggle-btn" id="btnRedouble" onclick="toggleOpt('redouble')">
-    <span class="btn-icon">×4</span>Redouble
-  </button>
-  <button class="toggle-btn" id="btnHokm" onclick="toggleOpt('hokm')">
-    <span class="btn-icon">♚</span>Hokm
-  </button>
+<div class="toggles">
+  <button class="tog" id="bD" onclick="tog('d')"><span class="tog-icon">&#215;2</span>Double</button>
+  <button class="tog" id="bR" onclick="tog('r')"><span class="tog-icon">&#215;4</span>Redouble</button>
+  <button class="tog" id="bH" onclick="tog('h')"><span class="tog-icon">&#9818;</span>Hokm</button>
 </div>
 
-<button class="add-btn" onclick="addRound()">+ Add Round</button>
+<button class="add-btn" onclick="addRound()">&#65291; Add Round</button>
 ```
 
   </div>
 
-  <!-- History -->
+  <!-- HISTORY -->
 
-  <div class="history-section">
-    <div class="divider">
-      <div class="divider-line"></div>
-      <span class="divider-text">Round History</span>
-      <div class="divider-line"></div>
+  <div class="hist-sec">
+    <div class="div"><div class="div-line"></div><span class="div-txt">History</span><div class="div-line"></div></div>
+    <div class="hist-hdr">
+      <span class="hist-ttl">Rounds Played</span>
+      <button class="clr-btn" onclick="clearAll()">Clear All</button>
     </div>
-    <div class="history-header">
-      <span class="history-title">Rounds Played</span>
-      <button class="clear-btn" onclick="clearHistory()">Clear All</button>
-    </div>
-    <div class="rounds-list" id="roundsList">
-      <div class="empty-state">
-        <div class="empty-icon">🃏</div>
-        No rounds yet — start the game!
-      </div>
+    <div class="rlist" id="rl">
+      <div class="empty"><span class="empty-ic">&#127137;</span>No rounds yet — start the game!</div>
     </div>
   </div>
 
 </div>
 
-<!-- Winner Modal -->
+<!-- WINNER MODAL -->
 
-<div class="winner-overlay" id="winnerOverlay">
-  <div class="winner-card">
-    <div class="winner-suits">♠ ♥</div>
-    <div class="winner-label">Winner</div>
-    <div class="winner-name" id="winnerName">Team 1</div>
-    <div class="winner-score" id="winnerScore"></div>
-    <button class="new-game-btn" onclick="resetGame()">New Game</button>
+<div class="overlay" id="ov">
+  <div class="wcard">
+    <div class="wsuits">&#9824; &#9829;</div>
+    <div class="wlbl">Winner</div>
+    <div class="wname" id="wn">—</div>
+    <div class="wscore" id="ws"></div>
+    <button class="ng-btn" onclick="resetGame()">New Game</button>
   </div>
 </div>
 
-<!-- Toast -->
+<!-- TOAST -->
 
 <div class="toast" id="toast"></div>
 
 <script>
-  let state = {
-    score1: 0,
-    score2: 0,
-    wins1: 0,
-    wins2: 0,
-    rounds: [],
-    options: { double: false, redouble: false, hokm: false }
-  };
+/* ── State ── */
+var G={s1:0,s2:0,w1:0,w2:0,rounds:[],d:false,r:false,h:false};
 
-  // Sync team name labels
-  ['team1Name','team2Name'].forEach((id, i) => {
-    document.getElementById(id).addEventListener('input', updateLabels);
-    document.getElementById(`bidTeam`).options[i+1].text = '';
-  });
+/* ── Helpers ── */
+function el(id){return document.getElementById(id)}
+function esc(s){var d=document.createElement('div');d.textContent=s;return d.innerHTML}
 
-  function updateLabels() {
-    const t1 = document.getElementById('team1Name').value || 'Team 1';
-    const t2 = document.getElementById('team2Name').value || 'Team 2';
-    document.getElementById('label1').textContent = t1;
-    document.getElementById('label2').textContent = t2;
-    document.getElementById('t1Name').textContent = t1;
-    document.getElementById('t2Name').textContent = t2;
-    document.getElementById('bidTeam').options[1].text = t1 + ' Bid';
-    document.getElementById('bidTeam').options[2].text = t2 + ' Bid';
-  }
+/* ── Name sync ── */
+function syncNames(){
+  var t1=el('n1').value||'Team 1', t2=el('n2').value||'Team 2';
+  el('l1').textContent=t1; el('l2').textContent=t2;
+  el('pn1').textContent=t1; el('pn2').textContent=t2;
+  el('bid').options[1].text=t1+' — Bid';
+  el('bid').options[2].text=t2+' — Bid';
+}
+el('n1').addEventListener('input',syncNames);
+el('n2').addEventListener('input',syncNames);
+el('tgt').addEventListener('input',updateProg);
+syncNames();
 
-  updateLabels();
+/* ── Toggles ── */
+function tog(k){
+  if(k==='d'){G.d=!G.d;if(G.d)G.r=false}
+  else if(k==='r'){G.r=!G.r;if(G.r)G.d=false}
+  else{G.h=!G.h}
+  el('bD').className='tog'+(G.d?' on':'');
+  el('bR').className='tog'+(G.r?' on':'');
+  el('bH').className='tog'+(G.h?' on':'');
+}
 
-  document.getElementById('targetScore').addEventListener('input', function() {
-    document.getElementById('targetLabel').textContent = '/ ' + (this.value || 152);
-    updateProgress();
-  });
-
-  function toggleOpt(key) {
-    // double and redouble are exclusive
-    if (key === 'double') {
-      state.options.double = !state.options.double;
-      if (state.options.double) state.options.redouble = false;
-    } else if (key === 'redouble') {
-      state.options.redouble = !state.options.redouble;
-      if (state.options.redouble) state.options.double = false;
-    } else {
-      state.options[key] = !state.options[key];
-    }
-    document.getElementById('btnDouble').classList.toggle('active', state.options.double);
-    document.getElementById('btnRedouble').classList.toggle('active', state.options.redouble);
-    document.getElementById('btnHokm').classList.toggle('active', state.options.hokm);
-  }
-
-  function addRound() {
-    const raw1 = parseInt(document.getElementById('input1').value) || 0;
-    const raw2 = parseInt(document.getElementById('input2').value) || 0;
-    const bidTeam = document.getElementById('bidTeam').value;
-
-    if (raw1 === 0 && raw2 === 0) {
-      showToast('Enter scores for both teams');
-      return;
-    }
-
-    let pts1 = raw1, pts2 = raw2;
-    const multiplier = state.options.redouble ? 4 : state.options.double ? 2 : 1;
-
-    // Hokm bonus: winner gets extra 30
-    if (state.options.hokm) {
-      if (pts1 > pts2) pts1 += 30;
-      else if (pts2 > pts1) pts2 += 30;
-    }
-
-    // Bid logic: bidding team must get more than 76 (half of 152)
-    if (bidTeam) {
-      const bidderScore = bidTeam === '1' ? pts1 : pts2;
-      if (bidderScore < 77) {
-        // Bidder failed — opponent gets bid team's points too
-        if (bidTeam === '1') { pts2 += pts1; pts1 = 0; }
-        else { pts1 += pts2; pts2 = 0; }
-        showToast('Bid failed! Opponent takes all points');
-      }
-    }
-
-    pts1 = Math.round(pts1 * multiplier);
-    pts2 = Math.round(pts2 * multiplier);
-
-    state.score1 += pts1;
-    state.score2 += pts2;
-    if (pts1 > pts2) state.wins1++;
-    else if (pts2 > pts1) state.wins2++;
-
-    const tags = [];
-    if (bidTeam) tags.push({ cls: 'bid', label: 'BID' });
-    if (state.options.double) tags.push({ cls: 'double', label: '×2' });
-    if (state.options.redouble) tags.push({ cls: 'redouble', label: '×4' });
-    if (state.options.hokm) tags.push({ cls: 'hokm', label: 'HOKM' });
-
-    state.rounds.push({ pts1, pts2, tags, raw1, raw2 });
-
-    document.getElementById('input1').value = '';
-    document.getElementById('input2').value = '';
-    document.getElementById('bidTeam').value = '';
-    state.options = { double: false, redouble: false, hokm: false };
-    ['btnDouble','btnRedouble','btnHokm'].forEach(id => document.getElementById(id).classList.remove('active'));
-
-    updateUI();
-    checkWinner();
-    showToast('Round added!');
-  }
-
-  function updateUI() {
-    const s1El = document.getElementById('score1');
-    const s2El = document.getElementById('score2');
-    s1El.textContent = state.score1;
-    s2El.textContent = state.score2;
-    s1El.classList.add('score-flash');
-    s2El.classList.add('score-flash');
-    setTimeout(() => { s1El.classList.remove('score-flash'); s2El.classList.remove('score-flash'); }, 400);
-
-    document.getElementById('wins1').textContent = state.wins1;
-    document.getElementById('wins2').textContent = state.wins2;
-
-    // Winning card highlight
-    const c1 = document.getElementById('team1Card');
-    const c2 = document.getElementById('team2Card');
-    c1.classList.toggle('winning', state.score1 > state.score2);
-    c2.classList.toggle('winning', state.score2 > state.score1);
-
-    updateProgress();
-    renderHistory();
-  }
-
-  function updateProgress() {
-    const target = parseInt(document.getElementById('targetScore').value) || 152;
-    const pct1 = Math.min(100, (state.score1 / target) * 100);
-    const pct2 = Math.min(100, (state.score2 / target) * 100);
-    document.getElementById('progressFill1').style.width = pct1 + '%';
-    document.getElementById('progressFill2').style.width = pct2 + '%';
-  }
-
-  function renderHistory() {
-    const list = document.getElementById('roundsList');
-    if (state.rounds.length === 0) {
-      list.innerHTML = '<div class="empty-state"><div class="empty-icon">🃏</div>No rounds yet — start the game!</div>';
-      return;
-    }
-    list.innerHTML = state.rounds.map((r, i) => {
-      const tagsHtml = r.tags.map(t => `<span class="tag ${t.cls}">${t.label}</span>`).join('');
-      return `
-      <div class="round-row">
-        <div class="round-num">${i + 1}</div>
-        <div class="round-team" style="font-size:10px">${document.getElementById('team1Name').value || 'T1'}</div>
-        <div class="round-pts t1">${r.pts1}</div>
-        <div class="round-sep">|</div>
-        <div class="round-pts t2">${r.pts2}</div>
-        <button class="del-round" onclick="deleteRound(${i})">✕</button>
-        ${tagsHtml ? `<div class="round-tags">${tagsHtml}</div>` : ''}
-      </div>`;
-    }).reverse().join('');
-  }
-
-  function deleteRound(index) {
-    const r = state.rounds[index];
-    state.score1 -= r.pts1;
-    state.score2 -= r.pts2;
-    if (r.pts1 > r.pts2) state.wins1 = Math.max(0, state.wins1 - 1);
-    else if (r.pts2 > r.pts1) state.wins2 = Math.max(0, state.wins2 - 1);
-    state.rounds.splice(index, 1);
-    updateUI();
-    showToast('Round removed');
-  }
-
-  function clearHistory() {
-    if (state.rounds.length === 0) return;
-    state.rounds = [];
-    state.score1 = 0; state.score2 = 0;
-    state.wins1 = 0; state.wins2 = 0;
-    updateUI();
-    showToast('History cleared');
-  }
-
-  function checkWinner() {
-    const target = parseInt(document.getElementById('targetScore').value) || 152;
-    let winner = null;
-    if (state.score1 >= target && state.score1 >= state.score2) winner = 1;
-    else if (state.score2 >= target && state.score2 > state.score1) winner = 2;
-    if (!winner) return;
-
-    const name = winner === 1
-      ? (document.getElementById('team1Name').value || 'Team 1')
-      : (document.getElementById('team2Name').value || 'Team 2');
-    const s1 = state.score1, s2 = state.score2;
-
-    document.getElementById('winnerName').textContent = name;
-    document.getElementById('winnerScore').textContent = `${s1} — ${s2}`;
-    document.getElementById('winnerOverlay').classList.add('show');
-    launchConfetti();
-  }
-
-  function resetGame() {
-    state = { score1: 0, score2: 0, wins1: 0, wins2: 0, rounds: [], options: { double: false, redouble: false, hokm: false } };
-    document.getElementById('winnerOverlay').classList.remove('show');
-    document.getElementById('input1').value = '';
-    document.getElementById('input2').value = '';
-    document.getElementById('bidTeam').value = '';
-    ['btnDouble','btnRedouble','btnHokm'].forEach(id => document.getElementById(id).classList.remove('active'));
-    updateUI();
-    showToast('New game started!');
-  }
-
-  let toastTimer;
-  function showToast(msg) {
-    const t = document.getElementById('toast');
-    t.textContent = msg;
-    t.classList.add('show');
-    clearTimeout(toastTimer);
-    toastTimer = setTimeout(() => t.classList.remove('show'), 2000);
-  }
-
-  function launchConfetti() {
-    const colors = ['#c9a84c','#e8c96a','#c0392b','#e74c3c','#f5ead5','#8b1a1a'];
-    for (let i = 0; i < 36; i++) {
-      setTimeout(() => {
-        const el = document.createElement('div');
-        el.className = 'confetti-piece';
-        el.style.left = Math.random() * 100 + 'vw';
-        el.style.background = colors[Math.floor(Math.random() * colors.length)];
-        el.style.animationDuration = (1.5 + Math.random() * 2) + 's';
-        el.style.animationDelay = (Math.random() * 0.5) + 's';
-        document.body.appendChild(el);
-        setTimeout(() => el.remove(), 4000);
-      }, i * 50);
+/* ── Add Round ── */
+function addRound(){
+  var r1=parseInt(el('i1').value)||0;
+  var r2=parseInt(el('i2').value)||0;
+  var bid=el('bid').value;
+  if(!r1&&!r2){toast('Enter scores first');return}
+  var p1=r1,p2=r2;
+  var m=G.r?4:G.d?2:1;
+  if(G.h){if(p1>p2)p1+=30;else if(p2>p1)p2+=30}
+  if(bid){
+    var bs=bid==='1'?p1:p2;
+    if(bs<77){
+      if(bid==='1'){p2+=p1;p1=0}else{p1+=p2;p2=0}
+      toast('Bid failed! Opponent wins all');
     }
   }
+  p1=Math.round(p1*m); p2=Math.round(p2*m);
+  G.s1+=p1; G.s2+=p2;
+  if(p1>p2)G.w1++; else if(p2>p1)G.w2++;
+  var tags=[];
+  if(bid)tags.push({c:'bid',l:'BID'});
+  if(G.d)tags.push({c:'dbl',l:'×2'});
+  if(G.r)tags.push({c:'rdbl',l:'×4'});
+  if(G.h)tags.push({c:'hkm',l:'HOKM'});
+  G.rounds.push({p1:p1,p2:p2,tags:tags});
+  el('i1').value='';el('i2').value='';
+  el('bid').value='';G.d=false;G.r=false;G.h=false;
+  el('bD').className='tog';el('bR').className='tog';el('bH').className='tog';
+  el('i1').placeholder='0';el('i2').placeholder='0';
+  render();
+  if(!checkWin())toast('Round added!');
+}
 
-  // Auto-balance: when typing in one input, auto-fill the other to sum to 152
-  ['input1','input2'].forEach((id, idx) => {
-    document.getElementById(id).addEventListener('input', function() {
-      const val = parseInt(this.value);
-      const otherId = idx === 0 ? 'input2' : 'input1';
-      const other = document.getElementById(otherId);
-      if (!isNaN(val) && val >= 0 && val <= 162) {
-        other.placeholder = Math.max(0, 152 - val);
-      }
-    });
-  });
+/* ── Render ── */
+function render(){
+  flash('s1',G.s1); flash('s2',G.s2);
+  el('w1').textContent=G.w1; el('w2').textContent=G.w2;
+  el('c1').className='tcard'+(G.s1>G.s2?' win':'');
+  el('c2').className='tcard'+(G.s2>G.s1?' win':'');
+  updateProg(); renderList();
+}
 
-  updateUI();
+function flash(id,val){
+  var e=el(id); e.textContent=val;
+  e.className='tscore'; void e.offsetWidth; e.className='tscore flash';
+}
+
+function updateProg(){
+  var tgt=parseInt(el('tgt').value)||152;
+  el('pb1').style.width=Math.min(100,(G.s1/tgt)*100)+'%';
+  el('pb2').style.width=Math.min(100,(G.s2/tgt)*100)+'%';
+  el('pv1').textContent=G.s1; el('pv2').textContent=G.s2;
+}
+
+function renderList(){
+  var list=el('rl');
+  if(!G.rounds.length){
+    list.innerHTML='<div class="empty"><span class="empty-ic">&#127137;</span>No rounds yet — start the game!</div>';
+    return;
+  }
+  var t1=esc(el('n1').value||'T1'), t2=esc(el('n2').value||'T2');
+  list.innerHTML=G.rounds.map(function(r,i){
+    var tg=r.tags.map(function(t){return'<span class="tag '+t.c+'">'+t.l+'</span>'}).join('');
+    return'<div class="rrow">'+
+      '<div class="rn">'+(i+1)+'</div>'+
+      '<div class="rt">'+t1+'</div>'+
+      '<div class="rp g">'+r.p1+'</div>'+
+      '<div class="rsep">|</div>'+
+      '<div class="rp r">'+r.p2+'</div>'+
+      '<div class="rt">'+t2+'</div>'+
+      '<button class="rdel" onclick="delRound('+i+')">&#10005;</button>'+
+      (tg?'<div class="rtags">'+tg+'</div>':'')+
+    '</div>';
+  }).reverse().join('');
+}
+
+function delRound(i){
+  var r=G.rounds[i];
+  G.s1-=r.p1;G.s2-=r.p2;
+  if(r.p1>r.p2)G.w1=Math.max(0,G.w1-1);
+  else if(r.p2>r.p1)G.w2=Math.max(0,G.w2-1);
+  G.rounds.splice(i,1);render();toast('Round removed');
+}
+
+function clearAll(){
+  if(!G.rounds.length)return;
+  G.rounds=[];G.s1=0;G.s2=0;G.w1=0;G.w2=0;
+  render();toast('History cleared');
+}
+
+/* ── Winner ── */
+function checkWin(){
+  var tgt=parseInt(el('tgt').value)||152,winner=0;
+  if(G.s1>=tgt&&G.s1>=G.s2)winner=1;
+  else if(G.s2>=tgt&&G.s2>G.s1)winner=2;
+  if(!winner)return false;
+  el('wn').textContent=winner===1?(el('n1').value||'Team 1'):(el('n2').value||'Team 2');
+  el('ws').textContent=G.s1+' — '+G.s2;
+  el('ov').className='overlay show';
+  confetti();return true;
+}
+
+/* ── Reset ── */
+function resetGame(){
+  G={s1:0,s2:0,w1:0,w2:0,rounds:[],d:false,r:false,h:false};
+  el('ov').className='overlay';
+  el('i1').value='';el('i2').value='';el('bid').value='';
+  el('bD').className='tog';el('bR').className='tog';el('bH').className='tog';
+  render();toast('New game!');
+}
+
+/* ── Auto-hint ── */
+el('i1').addEventListener('input',function(){
+  var v=parseInt(this.value);
+  el('i2').placeholder=(!isNaN(v)&&v>=0)?Math.max(0,152-v):'0';
+});
+el('i2').addEventListener('input',function(){
+  var v=parseInt(this.value);
+  el('i1').placeholder=(!isNaN(v)&&v>=0)?Math.max(0,152-v):'0';
+});
+
+/* ── Toast ── */
+var tt;
+function toast(msg){
+  var e=el('toast');e.textContent=msg;e.className='toast show';
+  clearTimeout(tt);tt=setTimeout(function(){e.className='toast'},2100);
+}
+
+/* ── Confetti ── */
+function confetti(){
+  var cols=['#c9a84c','#e8c96a','#b83227','#d94535','#f0e2c4','#fff'];
+  for(var i=0;i<40;i++){
+    (function(d){
+      setTimeout(function(){
+        var e=document.createElement('div');
+        e.className='cfp';
+        e.style.left=(Math.random()*100)+'vw';
+        e.style.background=cols[Math.floor(Math.random()*cols.length)];
+        var dur=(1.6+Math.random()*2).toFixed(2)+'s';
+        e.style.cssText+=';-webkit-animation:cf '+dur+' linear forwards;animation:cf '+dur+' linear forwards;';
+        document.body.appendChild(e);
+        setTimeout(function(){if(e.parentNode)e.parentNode.removeChild(e)},4000);
+      },d);
+    })(i*55);
+  }
+}
+
+/* Init */
+render();
 </script>
 
 </body>
