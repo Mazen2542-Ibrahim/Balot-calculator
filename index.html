@@ -39,7 +39,6 @@
 
 html {
 background-color: #1A1410;
-/* Prevent Safari from adding any white */
 -webkit-text-size-adjust: 100%;
 }
 body {
@@ -48,7 +47,6 @@ font-family: ‘Cinzel’, serif;
 color: #F2E4C4;
 -webkit-font-smoothing: antialiased;
 overscroll-behavior-y: none;
-/* Full height without overflow tricks that break Safari */
 min-height: 100vh;
 display: flex;
 justify-content: center;
@@ -58,7 +56,6 @@ justify-content: center;
 width: 100%;
 max-width: 430px;
 background-color: #1A1410;
-/* Bottom padding accounts for Safari’s browser toolbar (~83px) + extra */
 padding-bottom: 110px;
 }
 
@@ -66,7 +63,6 @@ padding-bottom: 110px;
 .hdr {
 background-color: #231E17;
 border-bottom: 2px solid #4A3E28;
-/* Top padding accounts for the status bar notch */
 padding: env(safe-area-inset-top, 20px) 20px 18px;
 padding-top: max(env(safe-area-inset-top, 0px), 20px);
 text-align: center;
@@ -132,7 +128,6 @@ font-family: ‘Cinzel’, serif;
 font-size: 18px;
 font-weight: 600;
 text-align: right;
-/* Fixed width prevents layout shift */
 width: 60px;
 min-width: 0;
 -webkit-appearance: none;
@@ -166,9 +161,8 @@ gap: 12px;
 padding: 14px 14px 0;
 }
 .tcard {
-/* Explicit width — each card takes exactly half minus gap */
 flex: 1;
-width: 0; /* flex children don’t overflow */
+width: 0;
 min-width: 0;
 background-color: #231E17;
 border: 2px solid #4A3E28;
@@ -199,7 +193,6 @@ background: transparent;
 border: none;
 border-bottom: 1.5px solid #4A3E28;
 text-align: center;
-/* Explicit width so it doesn’t overflow the card */
 width: 100%;
 max-width: 100%;
 outline: none;
@@ -300,22 +293,18 @@ white-space: nowrap;
 .entry-sec {
 padding: 0 14px;
 overflow: hidden;
-/* Establish a block formatting context so children respect this width */
 display: block;
 }
 
 .entry-grid {
-/* Use CSS Grid — columns are guaranteed equal and gap is internal */
 display: grid;
 grid-template-columns: 1fr 1fr;
 gap: 12px;
 margin-bottom: 12px;
-/* 100% of the padded parent — no viewport bleed */
 width: 100%;
 box-sizing: border-box;
 }
 .eg {
-/* Grid cell — no explicit width needed, grid handles it */
 min-width: 0;
 display: flex;
 flex-direction: column;
@@ -342,7 +331,6 @@ font-weight: 600;
 text-align: center;
 padding: 14px 0;
 outline: none;
-/* Fill the grid cell exactly — box-sizing handles border */
 width: 100%;
 min-width: 0;
 max-width: 100%;
@@ -363,98 +351,6 @@ transition: border-color 0.2s, background-color 0.2s;
 #i2::placeholder { color: #5A2010; }
 #i1:focus { border-color: #D4A843; background-color: #2C261D; color: #F5D060; }
 #i2:focus { border-color: #C43525; background-color: #2C1A14; color: #FF6050; }
-
-/* BID BOX */
-.bid-box {
-background-color: #231E17;
-border: 2px solid #4A3E28;
-border-radius: 12px;
-padding: 12px 14px;
-margin-bottom: 12px;
-}
-.bid-lbl {
-font-size: 10px;
-color: #A89060;
-letter-spacing: 1.5px;
-text-transform: uppercase;
-margin-bottom: 8px;
-}
-.sel-wrap { position: relative; }
-.sel-wrap::after {
-content: ‘▾’;
-position: absolute;
-right: 14px;
-top: 50%;
-transform: translateY(-50%);
--webkit-transform: translateY(-50%);
-color: #A89060;
-font-size: 14px;
-pointer-events: none;
-line-height: 1;
-}
-.bid-sel {
-width: 100%;
-background-color: #2C261D;
-border: 2px solid #4A3E28;
-border-radius: 10px;
-color: #F2E4C4;
-font-family: ‘Cinzel’, serif;
-font-size: 16px;
-padding: 12px 38px 12px 14px;
-outline: none;
-cursor: pointer;
--webkit-appearance: none;
--moz-appearance: none;
-appearance: none;
-display: block;
-}
-.bid-sel::-ms-expand { display: none; }
-.bid-sel option { background-color: #231E17; color: #F2E4C4; }
-
-/* TOGGLES */
-.toggles {
-display: grid;
-grid-template-columns: 1fr 1fr 1fr;
-gap: 10px;
-margin-bottom: 12px;
-width: 100%;
-box-sizing: border-box;
-}
-.tog {
-min-width: 0;
-overflow: hidden;
-background-color: #231E17;
-border: 2px solid #4A3E28;
-border-radius: 12px;
-color: #A89060;
-font-family: ‘Cinzel’, serif;
-font-size: 10px;
-letter-spacing: 0.5px;
-padding: 11px 4px 9px;
-cursor: pointer;
-text-align: center;
-line-height: 1.5;
--webkit-appearance: none;
-appearance: none;
-display: block;
-width: 100%;
-box-sizing: border-box;
-transition: background-color 0.18s, border-color 0.18s, color 0.18s;
--webkit-transition: background-color 0.18s, border-color 0.18s, color 0.18s;
-}
-.tog-icon {
-font-size: 16px;
-display: block;
-margin-bottom: 3px;
-color: #5A4A30;
-}
-.tog.on {
-background-color: #2C2210;
-border-color: #C49A2A;
-color: #F0C85A;
-}
-.tog.on .tog-icon { color: #D4A843; }
-.tog:active { opacity: 0.72; }
 
 /* ADD BUTTON */
 .add-btn {
@@ -583,10 +479,6 @@ margin-top: 4px; padding-left: 30px;
 font-size: 9px; padding: 3px 8px; border-radius: 20px;
 letter-spacing: 0.5px; font-family: ‘Cinzel’, serif; font-weight: 600;
 }
-.tag.bid  { background-color: #3A1410; color: #F09080; border: 1px solid #7A2818; }
-.tag.dbl  { background-color: #2C2210; color: #F5D060; border: 1px solid #6A5020; }
-.tag.rdbl { background-color: #3A1410; color: #F08070; border: 1px solid #7A2818; }
-.tag.hkm  { background-color: #102818; color: #60D890; border: 1px solid #1E6030; }
 
 .empty {
 text-align: center; padding: 28px 0;
@@ -641,17 +533,9 @@ padding: 14px 36px; cursor: pointer;
 }
 .ng-btn:active { opacity: 0.85; }
 
-/* ─── TOAST ───
-KEY FIX: position relative to the app, not fixed to viewport.
-Safari’s browser toolbar overlaps fixed-bottom elements.
-We use a sticky-like approach inside the scroll flow instead.
-The toast is injected at the end of #app and shown/hidden via opacity+transform.
-It sits ABOVE the bottom padding we already set (110px).
-─────────────────────────────────────────── */
+/* ─── TOAST ─── */
 .toast {
-/* Fixed to viewport center-bottom but offset above Safari toolbar */
 position: fixed;
-/* 100px clears Safari’s bottom toolbar reliably on all iPhones */
 bottom: max(100px, calc(60px + env(safe-area-inset-bottom, 0px)));
 left: 50%;
 transform: translateX(-50%) translateY(20px);
@@ -661,18 +545,15 @@ background-color: #2C261D;
 border: 2px solid #C49A2A;
 border-radius: 24px;
 padding: 12px 24px;
-/* Ensure text is ALWAYS visible */
 color: #F2E4C4;
 font-family: ‘Cinzel’, serif;
 font-size: 13px;
 letter-spacing: 0.5px;
 white-space: nowrap;
-/* Above modal */
 z-index: 1000;
 pointer-events: none;
 transition: opacity 0.25s ease, transform 0.25s ease;
 -webkit-transition: opacity 0.25s ease, -webkit-transform 0.25s ease;
-/* Prevent it from stretching */
 max-width: calc(100vw - 40px);
 }
 .toast.show {
@@ -807,29 +688,6 @@ to   { opacity: 0; -webkit-transform: translateY(110vh) rotate(720deg); }
     </div>
 
 ```
-<div class="bid-box">
-  <div class="bid-lbl">♚ Bid Team — (حكم)</div>
-  <div class="sel-wrap">
-    <select class="bid-sel" id="bid">
-      <option value="">No Bid</option>
-      <option value="1">فريق ١ — Bid</option>
-      <option value="2">فريق ٢ — Bid</option>
-    </select>
-  </div>
-</div>
-
-<div class="toggles">
-  <button class="tog" id="bD" onclick="tog('d')">
-    <span class="tog-icon">×2</span>Double
-  </button>
-  <button class="tog" id="bR" onclick="tog('r')">
-    <span class="tog-icon">×4</span>Redouble
-  </button>
-  <button class="tog" id="bH" onclick="tog('h')">
-    <span class="tog-icon">♚</span>Hokm
-  </button>
-</div>
-
 <button class="add-btn" onclick="addRound()">+ ADD ROUND</button>
 ```
 
@@ -869,12 +727,12 @@ to   { opacity: 0; -webkit-transform: translateY(110vh) rotate(720deg); }
   </div>
 </div>
 
-<!-- TOAST — outside #app so it's always on top -->
+<!-- TOAST -->
 
 <div class="toast" id="toast" role="status" aria-live="polite"></div>
 
 <script>
-var G = { s1:0, s2:0, w1:0, w2:0, rounds:[], d:false, r:false, h:false };
+var G = { s1:0, s2:0, w1:0, w2:0, rounds:[] };
 
 function el(id) { return document.getElementById(id); }
 function esc(s) { var d = document.createElement('div'); d.textContent = s; return d.innerHTML; }
@@ -887,53 +745,30 @@ function syncNames() {
   el('l2').textContent = t2;
   el('pn1').textContent = t1;
   el('pn2').textContent = t2;
-  el('bid').options[1].text = t1 + ' — Bid';
-  el('bid').options[2].text = t2 + ' — Bid';
 }
 el('n1').addEventListener('input', syncNames);
 el('n2').addEventListener('input', syncNames);
 el('tgt').addEventListener('input', updateProg);
 syncNames();
 
-/* ── Toggles ── */
-function tog(k) {
-  if (k === 'd') { G.d = !G.d; if (G.d) G.r = false; }
-  else if (k === 'r') { G.r = !G.r; if (G.r) G.d = false; }
-  else { G.h = !G.h; }
-  el('bD').className = 'tog' + (G.d ? ' on' : '');
-  el('bR').className = 'tog' + (G.r ? ' on' : '');
-  el('bH').className = 'tog' + (G.h ? ' on' : '');
-}
-
 /* ── Add Round ── */
 function addRound() {
   var r1 = parseInt(el('i1').value) || 0;
   var r2 = parseInt(el('i2').value) || 0;
-  var bid = el('bid').value;
   if (!r1 && !r2) { showToast('Enter scores first'); return; }
   var p1 = r1, p2 = r2, m = G.r ? 4 : G.d ? 2 : 1;
   if (G.h) { if (p1 > p2) p1 += 30; else if (p2 > p1) p2 += 30; }
-  if (bid) {
-    var bs = bid === '1' ? p1 : p2;
-    if (bs < 77) {
-      if (bid === '1') { p2 += p1; p1 = 0; }
-      else             { p1 += p2; p2 = 0; }
-      showToast('Bid failed! Opponent takes all');
-    }
-  }
   p1 = Math.round(p1 * m);
   p2 = Math.round(p2 * m);
   G.s1 += p1; G.s2 += p2;
   if (p1 > p2) G.w1++; else if (p2 > p1) G.w2++;
   var tags = [];
-  if (bid) tags.push({ c: 'bid',  l: 'BID' });
   if (G.d) tags.push({ c: 'dbl',  l: '×2' });
   if (G.r) tags.push({ c: 'rdbl', l: '×4' });
   if (G.h) tags.push({ c: 'hkm',  l: 'HOKM' });
   G.rounds.push({ p1: p1, p2: p2, tags: tags });
   /* Reset inputs */
   el('i1').value = ''; el('i2').value = '';
-  el('bid').value = '';
   G.d = false; G.r = false; G.h = false;
   el('bD').className = 'tog';
   el('bR').className = 'tog';
@@ -1034,7 +869,6 @@ function resetGame() {
   G = { s1:0, s2:0, w1:0, w2:0, rounds:[], d:false, r:false, h:false };
   el('ov').className = 'overlay';
   el('i1').value = ''; el('i2').value = '';
-  el('bid').value = '';
   el('bD').className = 'tog';
   el('bR').className = 'tog';
   el('bH').className = 'tog';
@@ -1065,11 +899,9 @@ document.addEventListener('touchstart', function(e) {
 var tt;
 function showToast(msg) {
   var e = el('toast');
-  /* Clear and re-set to force repaint — fixes Safari empty-toast bug */
   e.className = 'toast';
   e.textContent = '';
   clearTimeout(tt);
-  /* Small delay ensures the DOM updates before we show */
   setTimeout(function() {
     e.textContent = msg;
     e.className = 'toast show';
