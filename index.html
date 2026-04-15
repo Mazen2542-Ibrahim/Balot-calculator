@@ -756,23 +756,11 @@ function addRound() {
   var r1 = parseInt(el('i1').value) || 0;
   var r2 = parseInt(el('i2').value) || 0;
   if (!r1 && !r2) { showToast('Enter scores first'); return; }
-  var p1 = r1, p2 = r2, m = G.r ? 4 : G.d ? 2 : 1;
-  if (G.h) { if (p1 > p2) p1 += 30; else if (p2 > p1) p2 += 30; }
-  p1 = Math.round(p1 * m);
-  p2 = Math.round(p2 * m);
+  var p1 = r1, p2 = r2;
   G.s1 += p1; G.s2 += p2;
   if (p1 > p2) G.w1++; else if (p2 > p1) G.w2++;
-  var tags = [];
-  if (G.d) tags.push({ c: 'dbl',  l: '×2' });
-  if (G.r) tags.push({ c: 'rdbl', l: '×4' });
-  if (G.h) tags.push({ c: 'hkm',  l: 'HOKM' });
-  G.rounds.push({ p1: p1, p2: p2, tags: tags });
-  /* Reset inputs */
+  G.rounds.push({ p1: p1, p2: p2, tags: [] });
   el('i1').value = ''; el('i2').value = '';
-  G.d = false; G.r = false; G.h = false;
-  el('bD').className = 'tog';
-  el('bR').className = 'tog';
-  el('bH').className = 'tog';
   el('i1').placeholder = '0';
   el('i2').placeholder = '0';
   render();
@@ -866,12 +854,9 @@ function checkWin() {
 
 /* ── Reset ── */
 function resetGame() {
-  G = { s1:0, s2:0, w1:0, w2:0, rounds:[], d:false, r:false, h:false };
+  G = { s1:0, s2:0, w1:0, w2:0, rounds:[] };
   el('ov').className = 'overlay';
   el('i1').value = ''; el('i2').value = '';
-  el('bD').className = 'tog';
-  el('bR').className = 'tog';
-  el('bH').className = 'tog';
   render();
   showToast('New game started!');
 }
